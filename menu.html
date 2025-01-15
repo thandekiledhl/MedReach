@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedReach Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4f1f9 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 1.2rem 2rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            color: #2c7a51;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            color: #2c7a51;
+            font-size: 2rem;
+        }
+
+        /* Dashboard Container */
+        .dashboard {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 1.5rem;
+        }
+
+        .dashboard-subtitle {
+            font-size: 1.2rem;
+            color: #4a5568;
+            margin-bottom: 3rem;
+        }
+
+        /* Grid Layout */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            position: relative;
+        }
+
+        /* Dashboard Item Cards */
+        .dashboard-item {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(44, 122, 81, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            aspect-ratio: 1 / 1;
+        }
+
+        .dashboard-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(44, 122, 81, 0.15);
+        }
+
+        /* Icon Title Styling */
+        .icon-title {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c7a51;
+            margin-bottom: 1rem;
+        }
+
+        .icon {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            background: rgba(44, 122, 81, 0.1);
+            color: #2c7a51;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Card Description */
+        .card-description {
+            color: #4a5568;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+
+        /* SOS Button Special Styling */
+        .sos {
+            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+            color: white;
+            border: none;
+            grid-column: span 2;
+            aspect-ratio: auto;
+        }
+
+        .sos .icon-title {
+            color: white;
+            flex-direction: row;
+        }
+
+        .sos .icon {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 60px;
+            height: 60px;
+        }
+
+        .sos .card-description {
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 300px;
+        }
+
+        /* Decorative elements */
+        .decorative-circle {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .circle-1 {
+            width: 400px;
+            height: 400px;
+            background: #2c7a51;
+            top: -100px;
+            right: -100px;
+        }
+
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            background: #3498db;
+            bottom: -50px;
+            left: -50px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .dashboard-subtitle {
+                font-size: 1rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sos {
+                grid-column: span 1;
+            }
+
+            .dashboard-item {
+                aspect-ratio: auto;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="decorative-circle circle-1"></div>
+    <div class="decorative-circle circle-2"></div>
+
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <i class="fas fa-heartbeat logo-icon"></i>
+            MedReach
+        </a>
+    </nav>
+
+    <div class="dashboard">
+        <h1 class="page-title">Your Health Dashboard</h1>
+        <p class="dashboard-subtitle">Access all your healthcare needs in one place</p>
+        
+        <div class="dashboard-grid">
+            <!-- AI Symptom Checker -->
+            <div class="dashboard-item" onclick="window.location.href='ai.html'">
+                <div class="icon-title">
+                    <span class="icon">
+                        <i class="fas fa-robot"></i>
+                    </span>
+                    AI Symptom Checker
+                </div>
+                <p class="card-description">Get instant health assessments using our AI system</p>
+            </div>
+
+            <!-- Medication Reminder -->
+            <div class="dashboard-item" onclick="window.location.href='medication.html'">
+                <div class="icon-title">
+                    <span class="icon">
+                        <i class="fas fa-pills"></i>
+                    </span>
+                    Medication Reminder
+                </div>
+                <p class="card-description">Never miss your medications with smart reminders</p>
+            </div>
+
+            <!-- Clinics Near Me -->
+            <div class="dashboard-item" onclick="window.location.href='hospitals.html'">
+                <div class="icon-title">
+                    <span class="icon">
+                        <i class="fas fa-hospital"></i>
+                    </span>
+                    Clinics Near Me
+                </div>
+                <p class="card-description">Find healthcare facilities nearby</p>
+            </div>
+
+            <!-- Profile -->
+            <div class="dashboard-item" onclick="window.location.href='profile.html'">
+                <div class="icon-title">
+                    <span class="icon">
+                        <i class="fas fa-user-circle"></i>
+                    </span>
+                    Profile
+                </div>
+                <p class="card-description">Manage your health information</p>
+            </div>
+
+            <!-- SOS -->
+            <div class="dashboard-item sos" onclick="confirmSOS()">
+                <div class="icon-title">
+                    <span class="icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </span>
+                    SOS Emergency
+                </div>
+                <p class="card-description">Quick access to emergency services and immediate medical assistance</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function confirmSOS() {
+            if (confirm('Are you sure you want to proceed? This will alert nearby users that you need help.')) {
+                window.location.href = 'sos.html'; // Redirect to the SOS page if confirmed
+            }
+        }
+    </script>
+</body>
+</html>

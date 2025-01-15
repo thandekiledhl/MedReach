@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedReach - Medication Reminder</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4f1f9 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 1.2rem 2rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            color: #2c7a51;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            color: #2c7a51;
+            font-size: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .section-title {
+            color: #1a1a1a;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .add-button {
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #2c7a51 0%, #1e5c3c 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px rgba(44, 122, 81, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .add-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(44, 122, 81, 0.3);
+        }
+
+        .reminder-list {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .reminder-item {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .reminder-item:hover {
+            background: #f8f9fa;
+        }
+
+        .reminder-item:last-child {
+            border-bottom: none;
+        }
+
+        .reminder-info {
+            color: #4a5568;
+        }
+
+        .reminder-info strong {
+            color: #2c7a51;
+            font-size: 1.1rem;
+        }
+
+        .reminder-time {
+            color: #718096;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .reminder-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .action-button {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .edit-btn {
+            background: white;
+            color: #2c7a51;
+            border: 2px solid #2c7a51;
+        }
+
+        .delete-btn {
+            background: white;
+            color: #e53e3e;
+            border: 2px solid #e53e3e;
+        }
+
+        .edit-btn:hover {
+            background: #2c7a51;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #e53e3e;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .modal-title {
+            color: #2c7a51;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #2c7a51;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(44, 122, 81, 0.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #718096;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #2c7a51;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .reminder-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .reminder-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" class="logo">
+            <i class="fas fa-heartbeat logo-icon"></i>
+            MedReach
+        </a>
+    </nav>
+
+    <div class="container">
+        <div class="section-title">
+            My Medications
+            <button onclick="openModal()" class="add-button">
+                <i class="fas fa-plus"></i>
+                Add Medication
+            </button>
+        </div>
+
+        <div class="reminder-list">
+            <div id="remindersList">
+                <!-- Reminders will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Reminder Modal -->
+    <div id="reminderModal" class="modal">
+        <div class="modal-content">
+            <h2 class="modal-title">
+                <i class="fas fa-pills"></i>
+                <span id="modalTitle">Add Medication Reminder</span>
+            </h2>
+            <form id="reminderForm">
+                <div class="form-group">
+                    <label for="medicationName">Medication Name</label>
+                    <input type="text" id="medicationName" required>
+                </div>
+                <div class="form-group">
+                    <label for="dosage">Dosage</label>
+                    <input type="text" id="dosage" required>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="time">Time</label>
+                    <input type="time" id="time" required>
+                </div>
+                <div class="form-group">
+                    <label for="frequency">Frequency</label>
+                    <select id="frequency" required>
+                        <option value="Once">Once</option>
+                        <option value="Daily">Daily</option>
+                        <option value="Weekly">Weekly</option>
+                    </select>
+                </div>
+                <div class="modal-buttons">
+                    <button type="submit" class="add-button" id="submitBtn">Add Reminder</button>
+                    <button type="button" onclick="closeModal()" class="action-button">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let reminders = [];
+        let editingId = null;
+
+        function openModal() {
+            editingId = null;
+            document.getElementById('modalTitle').textContent = 'Add Medication Reminder';
+            document.getElementById('reminderForm').reset();
+            document.getElementById('reminderModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('reminderModal').style.display = 'none';
+        }
+
+        document.getElementById('reminderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const reminder = {
+                id: editingId || Date.now(),
+                medication: document.getElementById('medicationName').value,
+                dosage: document.getElementById('dosage').value,
+                time: document.getElementById('time').value,
+                frequency: document.getElementById('frequency').value,
+                date: document.getElementById('date').value
+            };
+
+            if (editingId) {
+                updateReminder(reminder);
+            } else {
+                saveReminder(reminder);
+            }
+
+            scheduleNotification(reminder);
+            closeModal();
+            this.reset();
+        });
+
+        function saveReminder(reminder) {
+            reminders.push(reminder);
+            updateRemindersList();
+        }
+
+        function updateReminder(updatedReminder) {
+            reminders = reminders.map(reminder => reminder.id === editingId ? updatedReminder : reminder);
+            updateRemindersList();
+        }
+
+        function deleteReminder(id) {
+            reminders = reminders.filter(reminder => reminder.id !== id);
+            updateRemindersList();
+        }
+
+        function updateRemindersList() {
+            const remindersList = document.getElementById('remindersList');
+            remindersList.innerHTML = reminders.length ? reminders.map(reminder => `
+                <div class="reminder-item">
+                    <div class="reminder-info">
+                        <strong>${reminder.medication}</strong> - ${reminder.dosage}
+                        <div class="reminder-time">
+                            <span><i class="far fa-calendar-alt"></i> ${reminder.date}</span>
+                            <span><i class="far fa-clock"></i> ${reminder.time}</span>
+                            <span><i class="fas fa-repeat"></i> ${reminder.frequency}</span>
+                        </div>
+                    </div>
+                    <div class="reminder-actions">
+                        <button class="action-button edit-btn" onclick="openModal(${reminder.id})">
+                            <i class="fas fa-edit"></i>
+                            Edit
+                        </button>
+                        <button class="action-button delete-btn" onclick="deleteReminder(${reminder.id})">
+                            <i class="fas fa-trash"></i>
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('') : '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>No reminders set.</p></div>';
+        }
+
+        function scheduleNotification(reminder) {
+            if (!("Notification" in window)) {
+                alert("This browser does not support notifications");
+                return;
+            }
+
+            if (Notification.permission === "granted") {
+                const [hours, minutes] = reminder.time.split(':');
+                const notificationDate = new Date(reminder.date);
+                notificationDate.setHours(hours);
+                notificationDate.setMinutes(minutes);
+                notificationDate.setSeconds(0);
+
+                const now = new Date();
+
+                if (notificationDate < now) {
+                    alert("The selected date and time have already passed.");
+                    return;
+                }
+
+                setTimeout(() => {
+                    new Notification("MedReach Reminder", {
+                        body: `Time to take ${reminder.medication} - ${reminder.dosage}`,
+                        icon: "/api/placeholder/64/64"
+                    });
+                }, notificationDate - now);
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission();
+            }
+        }
+    </script>
+</body>
+</html>

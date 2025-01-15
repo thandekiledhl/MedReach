@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOS Alert</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f44336; /* Red background */
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .alert-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            margin: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffeb3b; /* Yellow for emphasis */
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .status {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #ffeb3b; /* Yellow for emphasis */
+            margin-bottom: 15px;
+        }
+
+        .icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #ffffff;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .status {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="alert-container">
+        <div class="icon">🚨</div>
+        <h1>SOS Alert!</h1>
+        <p class="status">Help is on its way!</p>
+        <p>Nearby users have been alerted that you need assistance.</p>
+        <p>Your safety is our priority. Stay calm and await help.</p>
+    </div>
+
+    <div class="footer">
+        &copy; 2024 Emergency Response System
+    </div>
+</body>
+</html>

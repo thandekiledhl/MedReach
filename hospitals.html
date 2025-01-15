@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedReach - Find Hospitals Near You</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .navbar {
+            background-color: #ffffff;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            color: #2c7a51;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .search-section {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .search-button {
+            padding: 0.75rem 1.5rem;
+            background-color: #2c7a51;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-button:hover {
+            background-color: #235f3f;
+        }
+
+        #map {
+            height: 500px;
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .results-section {
+            margin-top: 2rem;
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #hospitals-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .hospital-item {
+            padding: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .hospital-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">MedReach</div>
+    </nav>
+
+    <div class="container">
+        <section class="search-section">
+            <div class="search-container">
+                <input type="text" id="location-input" class="search-input" placeholder="Enter your location...">
+                <button onclick="searchHospitals()" class="search-button">Search Hospitals</button>
+            </div>
+        </section>
+
+        <div id="map"></div>
+
+        <section class="results-section">
+            <h2>Nearby Hospitals</h2>
+            <ul id="hospitals-list"></ul>
+        </section>
+    </div>
+
+    <script>
+        let map;
+        let service;
+        let infowindow;
+
+        function initMap() {
+            // Default location (will be updated when user searches)
+            const defaultLocation = { lat: 40.7128, lng: -74.0060 };
+            
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: defaultLocation,
+                zoom: 13,
+            });
+
+            infowindow = new google.maps.InfoWindow();
+            service = new google.maps.places.PlacesService(map);
+        }
+
+        function searchHospitals() {
+            const locationInput = document.getElementById('location-input').value;
+            
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ address: locationInput }, (results, status) => {
+                if (status === "OK") {
+                    const location = results[0].geometry.location;
+                    map.setCenter(location);
+
+                    const request = {
+                        location: location,
+                        radius: '5000',
+                        type: ['hospital']
+                    };
+
+                    service.nearbySearch(request, (results, status) => {
+                        if (status === google.maps.places.PlacesServiceStatus.OK) {
+                            // Clear previous markers and list
+                            clearResults();
+                            
+                            // Display results
+                            results.forEach(place => {
+                                createMarker(place);
+                                addToList(place);
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function createMarker(place) {
+            const marker = new google.maps.Marker({
+                map: map,
+                position: place.geometry.location,
+                title: place.name
+            });
+
+            google.maps.event.addListener(marker, "click", () => {
+                infowindow.setContent(
+                    `<div>
+                        <strong>${place.name}</strong><br>
+                        Rating: ${place.rating || 'N/A'}<br>
+                        ${place.vicinity}
+                    </div>`
+                );
+                infowindow.open(map, marker);
+            });
+        }
+
+        function addToList(place) {
+            const hospitalsList = document.getElementById('hospitals-list');
+            const listItem = document.createElement('li');
+            listItem.className = 'hospital-item';
+            listItem.innerHTML = `
+                <strong>${place.name}</strong><br>
+                Rating: ${place.rating || 'N/A'} ⭐<br>
+                Address: ${place.vicinity}
+            `;
+            hospitalsList.appendChild(listItem);
+        }
+
+        function clearResults() {
+            // Clear markers
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: map.getCenter(),
+                zoom: 13
+            });
+            service = new google.maps.places.PlacesService(map);
+            
+            // Clear list
+            document.getElementById('hospitals-list').innerHTML = '';
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeQqmg81QZbaPSday4eLUPvS54cthUcqc&libraries=places&callback=initMap" async defer></script>
+</body>
+</html>
